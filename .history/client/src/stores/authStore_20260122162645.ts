@@ -25,6 +25,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (e) {
         return false;
       }
+    }
     },
     logoutAdmin() {
       this.isAdminLoggedIn = false

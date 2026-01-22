@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', {
         return false;
       }
     },
+    },
     logoutAdmin() {
       this.isAdminLoggedIn = false
       localStorage.removeItem('adminLoggedIn')

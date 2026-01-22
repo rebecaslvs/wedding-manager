@@ -14,17 +14,18 @@ export const useAuthStore = defineStore('auth', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ password })
-        });
-        const result = await response.json();
+        })
+        const result = await response.json()
         if (result.success) {
-          this.isAdminLoggedIn = true;
-          localStorage.setItem('adminLoggedIn', 'true');
-          return true;
+          this.isAdminLoggedIn = true
+          localStorage.setItem('adminLoggedIn', 'true')
+          return true
         }
-        return false;
+        return false
       } catch (e) {
-        return false;
+        return false
       }
+    },
     },
     logoutAdmin() {
       this.isAdminLoggedIn = false
