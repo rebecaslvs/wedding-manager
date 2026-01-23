@@ -402,11 +402,23 @@ const closeEditGuestModal = () => {
   editingGuestData.value = null
 }
 
+const showFeedbackModal = ref(false)
+const feedbackMessage = ref('')
+
+function openFeedbackModal(message: string) {
+  feedbackMessage.value = message
+  showFeedbackModal.value = true
+}
+
+function closeFeedbackModal() {
+  showFeedbackModal.value = false
+}
+
 const saveEditGuest = () => {
   if (editingGuest.value && editingGuestData.value) {
     store.updateGuest(editingGuest.value.id, editingGuestData.value)
     closeEditGuestModal()
-    alert('Convidado atualizado com sucesso!')
+    openFeedbackModal('Convidado atualizado com sucesso!')
   }
 }
 
@@ -461,7 +473,7 @@ const getStatusText = (status: string) => {
 
 const updateWeddingInfo = () => {
   store.updateWeddingInfo(weddingForm.value)
-  alert('Informações atualizadas com sucesso!')
+  openFeedbackModal('Informações atualizadas com sucesso!')
 }
 
 const addNewGuest = () => {
@@ -474,7 +486,7 @@ const addNewGuest = () => {
       childrenCount: 0,
       status: 'pending'
     }
-    alert('Convidado adicionado com sucesso!')
+    openFeedbackModal('Convidado adicionado com sucesso!')
   }
 }
 
@@ -494,7 +506,7 @@ const addNewGift = () => {
       description: '',
       image: ''
     }
-    alert('Presente adicionado com sucesso!')
+    openFeedbackModal('Presente adicionado com sucesso!')
   }
 }
 

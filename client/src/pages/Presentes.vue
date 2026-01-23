@@ -1,4 +1,17 @@
 <template>
+    <!-- Modal de Feedback -->
+    <div v-if="showFeedbackModal" class="modal-overlay" @click="closeFeedbackModal">
+      <div class="modal" @click.stop>
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="modal-close" @click="closeFeedbackModal">✕</button>
+        </div>
+        <h2 style="margin-bottom: 1.5rem; color: var(--text-dark); text-align: center;">Notificação</h2>
+        <div class="success-content" style="text-align: center;">
+          <p style="color: #666; margin-bottom: 2rem;">{{ feedbackMessage }}</p>
+          <button class="btn btn-primary" @click="closeFeedbackModal" style="width: 120px;">OK</button>
+        </div>
+      </div>
+    </div>
   <div class="presentes">
     <div class="container">
       <h1>Lista de Presentes</h1>
@@ -142,12 +155,24 @@ const decrementQuantity = (giftId: string) => {
   quantities.value[giftId] = Math.max(0, (quantities.value[giftId] || 0) - 1)
 }
 
+const showFeedbackModal = ref(false)
+const feedbackMessage = ref('')
+
+function openFeedbackModal(message: string) {
+  feedbackMessage.value = message
+  showFeedbackModal.value = true
+}
+
+function closeFeedbackModal() {
+  showFeedbackModal.value = false
+}
+
 const addToCart = (giftId: string) => {
   const quantity = quantities.value[giftId] || 0
   if (quantity > 0) {
     store.addToCart(giftId, quantity)
     quantities.value[giftId] = 0
-    alert('Produto adicionado ao carrinho!')
+    openFeedbackModal('Produto adicionado ao carrinho!')
   }
 }
 

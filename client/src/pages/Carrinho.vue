@@ -83,15 +83,37 @@
     </div>
 
     <!-- Modal para Pix -->
+        <!-- Modal de Feedback -->
+        <div v-if="showFeedbackModal" class="modal-overlay" @click="closeFeedbackModal">
+          <div class="modal" @click.stop>
+            <button class="modal-close" @click="closeFeedbackModal">✕</button>
+            <h2>Notificação</h2>
+            <div class="success-content">
+              <p>{{ feedbackMessage }}</p>
+            </div>
+          </div>
+        </div>
     <div v-if="showPixModal" class="modal-overlay" @click="closePixModal">
       <div class="modal" @click.stop>
         <button class="modal-close" @click="closePixModal">✕</button>
-        <h2>Pagamento via Pix</h2>
+        <h2>Dados para pagamento via Pix</h2>
         <div class="pix-content">
           <div class="pix-info">
-            <h3>Dados para pagamento via Pix</h3>
             <p><strong>Valor Total:</strong> R$ {{ formatPrice(store.cartTotal) }}</p>
-            <p><strong>Chave Pix:</strong> {{ store.weddingInfo.pixKey || 'Não configurada' }}</p>
+            <p>
+              <strong>Chave Pix:</strong>
+              <span style="display: inline-flex; align-items: center; gap: 0.5em;">
+                <span>{{ store.weddingInfo.pixKey || 'Não configurada' }}</span>
+                <button
+                  v-if="store.weddingInfo.pixKey"
+                  @click="copyToClipboard(store.weddingInfo.pixKey)"
+                  type="button"
+                  class="btn btn-outline btn-copy"
+                >
+                  Copiar
+                </button>
+              </span>
+            </p>
             <p><strong>Nome:</strong> Rebeca Silva Alves</p>
             <p><strong>Banco:</strong> Nubank</p>
           </div>
@@ -318,11 +340,23 @@ const closeSuccessModal = () => {
 onMounted(() => {
   store.loadData()
 })
+const showFeedbackModal = ref(false)
+const feedbackMessage = ref('')
+
+function openFeedbackModal(message: string) {
+  feedbackMessage.value = message
+  showFeedbackModal.value = true
+}
+
+function closeFeedbackModal() {
+  showFeedbackModal.value = false
+}
+
 function copyToClipboard(link: string) {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link)
-      .then(() => alert('Link copiado!'))
-      .catch(() => alert('Não foi possível copiar o link.'))
+      .then(() => openFeedbackModal('Link copiado!'))
+      .catch(() => openFeedbackModal('Não foi possível copiar o link.'))
   } else {
     // Fallback para navegadores antigos
     const tempInput = document.createElement('input')
@@ -331,7 +365,7 @@ function copyToClipboard(link: string) {
     tempInput.select()
     document.execCommand('copy')
     document.body.removeChild(tempInput)
-    alert('Link copiado!')
+    openFeedbackModal('Link copiado!')
   }
 }
 </script>
@@ -574,6 +608,20 @@ input[type="tel"]:focus {
   background: #f9f9f9;
 }
 
+.btn-copy {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #fff;
+  margin-left: 0.5rem;
+  font-size: 0.95em;
+  padding: 0.3em 0.8em;
+}
+
+.btn-copy:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -593,8 +641,8 @@ input[type="tel"]:focus {
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
-  width: 90%;
+  max-width: 700px;
+  width: 95%;
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
