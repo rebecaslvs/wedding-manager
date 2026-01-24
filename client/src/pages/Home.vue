@@ -2,9 +2,7 @@
   <div class="home">
     <!-- Hero Section -->
     <section class="hero">
-      <div class="hero-bg">
-        <img src="/src/components/images/capa.jpg" alt="capa-casamento">
-      </div>
+      <div class="hero-bg"></div>
       <div class="hero-content">
         <h1 class="hero-title">Rebeca & Marcos</h1>
         <p class="hero-subtitle">14 de Junho de 2026</p>
